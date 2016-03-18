@@ -3,7 +3,11 @@
 
 /* hid descriptor for a keyboard */
 static struct hidg_func_descriptor ghid_device_android_keyboard = {
+<<<<<<< HEAD
 	.subclass		= 0, /* No subclass */
+=======
+	.subclass		= 1, /* Boot Interface Subclass */
+>>>>>>> 7f9c12906e89c98122f64ac5bf87e2c4f1abca16
 	.protocol		= 1, /* Keyboard */
 	.report_length		= 8,
 	.report_desc_length	= 63,

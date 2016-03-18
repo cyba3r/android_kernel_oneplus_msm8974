@@ -43,7 +43,10 @@ MODULE_PARM_DESC(aca_enable, "Enable ACA host mode to allow charging and host");
 //Flag for choosing either ID(host w/ vbus) or ID_A (host w/ charge) based on aca_enable toggle
 int ID_MODE;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7f9c12906e89c98122f64ac5bf87e2c4f1abca16
 static void dwc3_otg_reset(struct dwc3_otg *dotg);
 
 static void dwc3_otg_notify_host_mode(struct usb_otg *otg, int host_mode);
@@ -223,6 +226,19 @@ static int dwc3_otg_start_host(struct usb_otg *otg, int on)
                                return ret;
                        }
 
+<<<<<<< HEAD
+=======
+	if (ID_MODE == ID) {
+		if (!dotg->vbus_otg) {
+			dotg->vbus_otg = devm_regulator_get(dwc->dev->parent,
+								"vbus_dwc3");
+			if (IS_ERR(dotg->vbus_otg)) {
+				dev_err(dwc->dev, "Failed to get vbus regulator\n");
+				ret = PTR_ERR(dotg->vbus_otg);
+				dotg->vbus_otg = 0;
+				return ret;
+			}
+>>>>>>> 7f9c12906e89c98122f64ac5bf87e2c4f1abca16
 		}
 	}
 
@@ -233,12 +249,14 @@ static int dwc3_otg_start_host(struct usb_otg *otg, int on)
 		bq24196_wait_for_resume();
 #endif
 
-		dwc3_otg_notify_host_mode(otg, on);
-		ret = regulator_enable(dotg->vbus_otg);
-		if (ret) {
-			dev_err(otg->phy->dev, "unable to enable vbus_otg\n");
-			dwc3_otg_notify_host_mode(otg, 0);
-			return ret;
+		if (ID_MODE == ID) {
+			dwc3_otg_notify_host_mode(otg, on);
+			ret = regulator_enable(dotg->vbus_otg);
+			if (ret) {
+				dev_err(otg->phy->dev, "unable to enable vbus_otg\n");
+				dwc3_otg_notify_host_mode(otg, 0);
+				return ret;
+			}
 		}
 
 		/*
